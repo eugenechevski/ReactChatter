@@ -1,0 +1,70 @@
+{
+    "users": {
+        "$uid": {
+            "uid": "string",
+            "displayName": "string",
+            "email": "string",
+            "phoneNumber": "string",
+            "photoURL": "string",
+            "status": "string",
+            "lastSeen": "timestamp",
+            "chats": {
+                "$chatId": {
+                    "isPinned": "boolean",
+                    "isMuted": "boolean",
+                    "unreadCount": "number"
+                }
+            },
+            "settings": {
+                "savedMessages": ["$messageId"],
+                "privacy": {
+                    "blockedUsers": ["$uid"],
+                    "lastSeenPolicy": "string",
+                    "phoneNumberPolicy": "string",
+                    "profilePhotoPolicy": "string",
+                    "groupInvitePolicy": "string"
+                },
+                "notifications": {
+                    "messageNotifications": {
+                        "notify": "boolean",
+                        "sound": "string"
+                    },
+                    "groupNotifications": {
+                        "notify": "boolean",
+                        "sound": "string"
+                    }
+                },
+                "storage": {
+                    "$chatId": {
+                        "dataStored": "number"
+                    }
+                },
+                "language": "string"
+            }
+        }
+    },
+    "chats": {
+        "$chatId": {
+            "chatId": "string",
+            "name": "string",
+            "photoURL": "string",
+            "description": "string",
+            "isGroup": "boolean",
+            "members": ["$uid"],
+            "messages": ["$messageId"],
+            "creator": "$uid",
+            "lastMessage": "$messageId"
+        }
+    },
+    "messages": {
+        "$messageId": {
+            "messageId": "string",
+            "chatId": "$chatId",
+            "sender": "$uid",
+            "content": "string",
+            "time": "timestamp",
+            "read": "boolean",
+            "delivered": "boolean"
+        }
+    }
+}
