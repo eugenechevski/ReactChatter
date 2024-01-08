@@ -1,13 +1,18 @@
 import React from "react";
 import { NativeBaseProvider, Text, Box } from "native-base";
 import { Slot } from "expo-router";
-import theme from '@/styles/globalStyles.ts';
+import theme from "@/styles/globalStyles.ts";
 
 export default function RootLayout() {
   return (
     <NativeBaseProvider theme={theme}>
-      <Box flex={1} bg="#fff" alignItems="center" justifyContent="center">
-        <Text color={"main.crisp"} fontWeight={"bold"}>Open up App.js to start working on your app!</Text>
+      <Box
+        flex={1}
+        height={"full"}
+        width={"container"}
+        alignItems="center"
+        justifyContent="center"
+      >
         {/** Child root */}
         <Slot />
       </Box>
