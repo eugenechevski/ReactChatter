@@ -1,10 +1,36 @@
 import { View, Text } from "react-native";
-import { Fontisto } from '@expo/vector-icons'; 
+import auth from '@react-native-firebase/auth';
+import React, { useState, useEffect } from "react";
+import { Link, router } from "expo-router";
+
 
 export default function RootPage() {
+  // Set an initializing state whilst Firebase connects
+  const [initializing, setInitializing] = useState(true);
+  const [user, setUser] = useState();
+
+  // Handle user state changes
+  function onAuthStateChanged(user) {
+    setUser(user);
+    if (initializing) setInitializing(false);
+  }
+
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber; // unsubscribe on unmount
+  }, []);
+
+  if (initializing) return null;
+
+  useEffect(() => {
+    if (user) {
+      router.push("/home");
+    }
+  }, [user]);
+
   return (
     <View>
-      <Fontisto name="apple" size={24} color="black" />
+      {/** Sign-in UI */}
     </View>
   );
 }

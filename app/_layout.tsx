@@ -1,5 +1,5 @@
 import React from "react";
-import { NativeBaseProvider, Text, Box } from "native-base";
+import { NativeBaseProvider, Box } from "native-base";
 import { Slot } from "expo-router";
 import theme from "@/styles/globalStyles.ts";
 
