@@ -10,11 +10,11 @@ export default {
     ios: {
       supportsTablet: true,
       bundleIdentifier: "eugenechevski.reactchatter",
-      googleServicesFile: process.env.GOOGLE_SERVICES_PLIST,
+      googleServicesFile: process.env.GOOGLE_SERVICES_PLIST ?? "./GoogleService-Info.plist",
     },
     android: {
       package: "eugenechevski.reactchatter",
-      googleServicesFile: process.env.GOOGLE_SERVICES_JSON,
+      googleServicesFile: process.env.GOOGLE_SERVICES_JSON ?? "./google-services.json",
     },
     web: {
       bundler: "metro",
@@ -28,6 +28,7 @@ export default {
     },
     plugins: [
       "@react-native-firebase/app",
+      "@react-native-firebase/auth",
       [
         "expo-build-properties",
         {
