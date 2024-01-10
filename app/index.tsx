@@ -1,36 +1,9 @@
-import { View, Text } from "react-native";
-import auth from '@react-native-firebase/auth';
-import React, { useState, useEffect } from "react";
-import { Link, router } from "expo-router";
+import { Box, Text, Button, Input } from "native-base";
 
-
-export default function RootPage() {
-  // Set an initializing state whilst Firebase connects
-  const [initializing, setInitializing] = useState(true);
-  const [user, setUser] = useState();
-
-  // Handle user state changes
-  function onAuthStateChanged(user) {
-    setUser(user);
-    if (initializing) setInitializing(false);
-  }
-
-  useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber; // unsubscribe on unmount
-  }, []);
-
-  if (initializing) return null;
-
-  useEffect(() => {
-    if (user) {
-      router.push("/home");
-    }
-  }, [user]);
-
+export default function RootScreen() {
   return (
-    <View>
-      {/** Sign-in UI */}
-    </View>
+    <Box height="100%" width="100%" alignItems="center" justifyContent="center">
+      <Text>Welcome to React Chatter.</Text>
+    </Box>  
   );
 }

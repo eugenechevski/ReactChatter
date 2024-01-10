@@ -8,8 +8,9 @@ export default function RootLayout() {
     <NativeBaseProvider theme={theme}>
       <Box
         flex={1}
-        height={"full"}
-        width={"container"}
+        minHeight={"full"}
+        minWidth={"full"}
+        borderWidth={2}
         alignItems="center"
         justifyContent="center"
       >

@@ -3,24 +3,17 @@
     "version": ">= 5.9.3"
   },
   "build": {
-    "development-simulator": {
+    "dev": {
       "developmentClient": true,
       "distribution": "internal",
       "ios": {
         "simulator": true
-      }
-    },
-    "development": {
-      "developmentClient": true,
-      "distribution": "internal"
-    },
-    "preview": {
-      "distribution": "internal",
+      },
       "android": {
         "buildType": "apk"
       }
     },
-    "production": {}
+    "prod": {}
   },
   "submit": {
     "production": {}
