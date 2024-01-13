@@ -1,17 +1,23 @@
 {
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
+    "allowArbitraryExtensions": true,
+    "allowSyntheticDefaultImports": true,
+    "allowImportingTsExtensions": true,
     "strict": false,
     "baseUrl": ".",
     "paths": {
       "@/*": [
         "./app/*",
-        "./src/*"
-      ]
+        "./src/*",
+      ],
+      "@/assets/*": [
+        "./assets/*",
+      ],
     }
   },
   "include": [
     "**/*.ts",
-    "**/*.tsx"
+    "**/*.tsx",
   ]
 }
