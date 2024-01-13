@@ -1,7 +1,7 @@
 import React from "react";
 import { NativeBaseProvider, Box } from "native-base";
 import { Slot } from "expo-router";
-import theme from "@/styles/globalStyles.ts";
+import theme from "@/styles/globalStyles";
 
 export default function RootLayout() {
   return (
