@@ -1,7 +1,10 @@
-import { VStack, Text, Image, PresenceTransition } from "native-base";
+import { VStack, Text, Image, PresenceTransition, Button } from "native-base";
 import logo from "@/assets/images/logo-256.png";
+import { useRouter } from "expo-router";
 
 export default function RootScreen() {
+  const router = useRouter();
+
   return (
     <VStack
       backgroundColor={"main.sky"}
@@ -9,33 +12,28 @@ export default function RootScreen() {
       width="100%"
       alignItems="center"
       justifyContent="center"
-      space={3}
+      space={"1"}
     >
-      <PresenceTransition
-        initial={{ opacity: 0 }}
-        visible={true}
-        animate={{
-          opacity: 1,
-          transition: {
-            duration: 1000,
-          },
-        }}
+      <Image source={logo} alt="logo" size={"2xl"} alignSelf={"center"} />
+      <Text
+        fontSize={"2xl"}
+        fontWeight={"bold"}
+        color={"main.crisp"}
+        shadow={"9"}
       >
-        <Image
-          source={logo}
-          alt="logo"
-          size={"2xl"}
-          alignSelf={"center"}
-        />
-        <Text
-          fontSize={"2xl"}
-          fontWeight={"bold"}
-          color={"main.crisp"}
-          shadow={3}
-        >
-          Welcome to React Chatter.
-        </Text>
-      </PresenceTransition>
+        Welcome to React Chatter.
+      </Text>
+      <Button
+        width={"1/3"}
+        backgroundColor={"main.water"}
+        rounded={"full"}
+        shadow={"9"}
+        variant="solid"
+        colorScheme="main"
+        onPress={() => router.push("/sign-in")}
+      >
+        Let's Go
+      </Button>
     </VStack>
   );
 }
