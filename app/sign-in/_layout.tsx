@@ -1,7 +1,7 @@
-import { Box, Text } from "native-base";
+import { Box } from "native-base";
 import { Slot } from "expo-router";
 
-export default function SignInLayout({ children }) {
+export default function SignInLayout() {
   return (
     <Box
       flex={1}
@@ -10,10 +10,16 @@ export default function SignInLayout({ children }) {
       height={"full"}
       width={"full"}
     >
-      <Text fontSize="xl">Sign In</Text>
-
-      {/* Children */}
-      <Slot />
+      <Box
+        shadow={"9"}
+        rounded={"2xl"}
+        backgroundColor={"main.dirty"}
+        width={"90%"}
+        height={"20%"}
+        alignItems={"center"}>
+        {/* Children */}
+        <Slot />
+      </Box>
     </Box>
   );
 }

@@ -15,6 +15,7 @@ export default function RootLayout() {
     <ContextProvider>
       <NativeBaseProvider theme={theme}>
         <Box
+          backgroundColor={"main.sky"}
           flex={1}
           minHeight={"full"}
           minWidth={"full"}

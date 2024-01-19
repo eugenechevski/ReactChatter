@@ -54,7 +54,6 @@ export default function RootScreen() {
 
   return (
     <VStack
-      backgroundColor={"main.sky"}
       height="100%"
       width="100%"
       alignItems="center"
