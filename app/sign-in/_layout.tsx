@@ -15,7 +15,7 @@ export default function SignInLayout() {
         rounded={"2xl"}
         backgroundColor={"main.dirty"}
         width={"90%"}
-        height={"20%"}
+        height={"30%"}
         alignItems={"center"}>
         {/* Children */}
         <Slot />

@@ -1,44 +1,92 @@
-import { Text, Button, VStack, HStack, Input, Box, Select } from "native-base";
+import {
+  Text,
+  Button,
+  VStack,
+  HStack,
+  Input,
+  InputGroup,
+  InputLeftAddon,
+  Select,
+} from "native-base";
 import { customList, type CountryProperty } from "country-codes-list";
+import { phone } from "phone";
 import { useState } from "react";
 
 export default function SignInScreen() {
-  const countryNames = customList(
-    "countryNameEn" as CountryProperty,
-    "+{countryCallingCode}"
+  const phoneExtensions = customList(
+    "countryCallingCode" as CountryProperty,
+    "{countryNameEn}"
   );
-  const [selectedCountry, setSelectedCountry] = useState(countryNames[0]);
+  const [selectedPhoneExtension, setSelectedPhoneExtension] = useState("1");
+  const [phoneNumber, setPhoneNumber] = useState("");
+
+  const handleSignIn = () => {
+    const verificationResult = phone(
+      "+ " + selectedPhoneExtension + " " + phoneNumber
+    );
+
+    if (verificationResult.isValid) {
+      // TODO: Send verification code to the phone number
+    } else {
+      // TODO
+    }
+  };
 
   return (
     <VStack
       width={"full"}
       height={"full"}
-      space={"4"}
+      space={"8"}
       alignItems={"center"}
       justifyContent={"center"}
     >
       <Text fontSize={"xl"} shadow={"9"} color={"main.crisp"}>
         Enter your phone number
       </Text>
-      <HStack>
+      <HStack
+        width={"80%"}
+        space={2}
+        justifyItems={"center"}
+        alignItems={"center"}
+      >
         <Select
-          selectedValue={selectedCountry}
+          borderColor={"main.dirty"}
+          width={"80%"}
+          selectedValue={selectedPhoneExtension}
           _selectedItem={{
             bg: "main.dirty",
           }}
-          onValueChange={(country) => setSelectedCountry(country)}
+          onValueChange={(country) => setSelectedPhoneExtension(country)}
         >
-          {Object.keys(countryNames).map((country) => (
+          {Object.keys(phoneExtensions).map((ext) => (
             <Select.Item
-              key={country}
-              label={country + " " + countryNames[country]}
-              value={country}
+              key={ext}
+              label={"+ " + ext + " " + phoneExtensions[ext]}
+              value={ext}
             />
           ))}
         </Select>
-        <Input rounded={"2xl"} backgroundColor={"white"} width={"70%"}></Input>
+        <InputGroup width={"70%"} height={"10"}>
+          <InputLeftAddon children={"+ " + selectedPhoneExtension} />
+          <Input
+            keyboardType="phone-pad"
+            _focus={{ borderColor: "main.sky", borderWidth: 2 }}
+            width={"80%"}
+            rounded={"2xl"}
+            backgroundColor={"white"}
+            borderRadius={"full"}
+            fontSize={"md"}
+            onChangeText={(text) => setPhoneNumber(text)}
+            value={phoneNumber}
+          ></Input>
+        </InputGroup>
       </HStack>
-      <Button fontSize={"lg"} width={"1/2"} rounded={"full"} _hover={{shadow: "8"}}>
+      <Button
+        width={"1/2"}
+        rounded={"full"}
+        shadow={"9"}
+        _text={{ shadow: "9", fontSize: "md" }}
+      >
         Sign In
       </Button>
     </VStack>
