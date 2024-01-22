@@ -21,8 +21,10 @@ export default function SignInScreen() {
   const [phoneNumber, setPhoneNumber] = useState("");
 
   const handleSignIn = () => {
+    const fullPhoneNumber = "+ " + selectedPhoneExtension + " " + phoneNumber;
+
     const verificationResult = phone(
-      "+ " + selectedPhoneExtension + " " + phoneNumber
+      fullPhoneNumber,
     );
 
     if (verificationResult.isValid) {
@@ -40,9 +42,12 @@ export default function SignInScreen() {
       alignItems={"center"}
       justifyContent={"center"}
     >
+      {/* Label */}
       <Text fontSize={"xl"} shadow={"9"} color={"main.crisp"}>
         Enter your phone number
       </Text>
+
+      {/* Input */}
       <HStack
         width={"80%"}
         space={2}
@@ -81,13 +86,10 @@ export default function SignInScreen() {
           ></Input>
         </InputGroup>
       </HStack>
-      <Button
-        width={"1/2"}
-        rounded={"full"}
-        shadow={"9"}
-        _text={{ shadow: "9", fontSize: "md" }}
-      >
-        Sign In
+
+      {/* Button */}
+      <Button width={"1/2"} onPress={handleSignIn}>
+        Sign in
       </Button>
     </VStack>
   );
