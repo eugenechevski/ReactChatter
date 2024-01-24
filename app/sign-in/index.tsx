@@ -12,6 +12,7 @@ import {
 import { customList, type CountryProperty } from "country-codes-list";
 import { phone } from "phone";
 import { useState } from "react";
+import { useRouter } from "expo-router";
 
 export default function SignInScreen() {
   const phoneExtensions = customList(
@@ -21,6 +22,7 @@ export default function SignInScreen() {
   const [selectedPhoneExtension, setSelectedPhoneExtension] = useState("1");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [isPhoneNumberValid, setIsPhoneNumberValid] = useState(true);
+  const router = useRouter();
 
   const handleSignIn = () => {
     const fullPhoneNumber = "+ " + selectedPhoneExtension + " " + phoneNumber;
@@ -30,6 +32,7 @@ export default function SignInScreen() {
     if (verificationResult.isValid) {
       // TODO: Send verification code to the phone number
       setIsPhoneNumberValid(true);
+      router.replace(`/sign-in/phone-number-entered/${fullPhoneNumber}`);
     } else {
       // TODO
       setIsPhoneNumberValid(false);
@@ -101,7 +104,7 @@ export default function SignInScreen() {
 
       {/* Button */}
       <Button width={"1/2"} onPress={handleSignIn}>
-        Sign in
+        Send
       </Button>
     </VStack>
   );
