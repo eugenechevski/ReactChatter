@@ -1,4 +1,5 @@
 import {
+  Box,
   Text,
   Button,
   VStack,
@@ -19,18 +20,19 @@ export default function SignInScreen() {
   );
   const [selectedPhoneExtension, setSelectedPhoneExtension] = useState("1");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [isPhoneNumberValid, setIsPhoneNumberValid] = useState(true);
 
   const handleSignIn = () => {
     const fullPhoneNumber = "+ " + selectedPhoneExtension + " " + phoneNumber;
 
-    const verificationResult = phone(
-      fullPhoneNumber,
-    );
+    const verificationResult = phone(fullPhoneNumber);
 
     if (verificationResult.isValid) {
       // TODO: Send verification code to the phone number
+      setIsPhoneNumberValid(true);
     } else {
       // TODO
+      setIsPhoneNumberValid(false);
     }
   };
 
@@ -38,7 +40,7 @@ export default function SignInScreen() {
     <VStack
       width={"full"}
       height={"full"}
-      space={"8"}
+      space={"3"}
       alignItems={"center"}
       justifyContent={"center"}
     >
@@ -60,6 +62,7 @@ export default function SignInScreen() {
           selectedValue={selectedPhoneExtension}
           _selectedItem={{
             bg: "main.dirty",
+            _text: { color: "main.crisp" },
           }}
           onValueChange={(country) => setSelectedPhoneExtension(country)}
         >
@@ -86,6 +89,15 @@ export default function SignInScreen() {
           ></Input>
         </InputGroup>
       </HStack>
+
+      {/* Error message label */}
+      {!isPhoneNumberValid ? (
+        <Text fontSize={"md"} color={"red.500"}>
+          The phone number is invalid, try again.
+        </Text>
+      ) : (
+        <></>
+      )}
 
       {/* Button */}
       <Button width={"1/2"} onPress={handleSignIn}>
