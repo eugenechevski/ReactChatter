@@ -48,7 +48,7 @@ export default function RootScreen() {
     } else {
       // User is signed out
       console.log("User is signed out");
-      router.push("/sign-in");
+      router.replace("/sign-in/phone-number-entered/+17866176134");
     }
   }, [user, loading]);
 

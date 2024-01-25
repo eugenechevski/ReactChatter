@@ -1,5 +1,6 @@
 import { Button, extendTheme } from "native-base";
 import colors from "./colors";
+import { _Text } from "react-native";
 
 export default extendTheme({
   colors,
@@ -14,6 +15,11 @@ export default extendTheme({
           fontSize: "md",
           shadow: "9",
         },
+      },
+    },
+    Text: {
+      baseStyle: {
+        shadow: "9",
       },
     },
   },
