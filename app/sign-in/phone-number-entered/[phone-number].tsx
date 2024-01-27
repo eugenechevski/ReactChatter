@@ -1,38 +1,57 @@
 import { VStack, Text, Button, Input } from "native-base";
 import { useGlobalSearchParams } from "expo-router";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "expo-router";
-import auth from "@react-native-firebase/auth";
+import auth, { FirebaseAuthTypes } from "@react-native-firebase/auth";
+import { useUserContext } from "@/context/user/UserContext";
 
 export default function PhoneNumberEnteredScreen() {
   const phoneNumber = useGlobalSearchParams()["phone-number"];
   const router = useRouter();
+  const { dispatch } = useUserContext();
 
   const [code, setCode] = useState("");
-  const [confirm, setConfirm] = useState(null);
+  const [confirm, setConfirm] = useState<FirebaseAuthTypes.ConfirmationResult>(null);
   const [isValidCode, setIsValidCode] = useState(true);
 
-  const handleCodeEntered = () => {
-    confirmCode();
+  const confirmCode = async () => {
+    try {
+      await confirm.confirm(code);
+      setIsValidCode(true);
+    } catch (error) {
+      setIsValidCode(false);
+      console.log("Invalid code.")
+      console.log(error);
+    }
   };
 
   const handleChangePhoneNumber = () => {
     router.replace("/sign-in");
   };
 
-  const confirmCode = async () => {
-    try {
-      await confirm.confirm(code);
-    } catch (error) {
-      setIsValidCode(false);
-      console.log("Invalid code.");
-    }
+  const onAuthStateChanged = (user: FirebaseAuthTypes.User) => {
+    if (user) {
+      dispatch({ type: "SET_USER", payload: user });
+    };
   };
+
+  const createAccount = async () => {
+    // Create a user with the phone number
+  };
+
+  const sendCode = async () => {
+    const confirm = await auth().signInWithPhoneNumber(phoneNumber as string);
+    setConfirm(confirm);
+  }
+
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber;
+  }, []);
 
   // Send code
   useEffect(() => {
-    const confirmation = auth().signInWithPhoneNumber(phoneNumber as string);
-    setConfirm(confirmation);
+    sendCode();
   }, []);
 
   return (
@@ -88,9 +107,10 @@ export default function PhoneNumberEnteredScreen() {
       )}
 
       {/* Button */}
-      <Button width={"1/2"} onPress={handleCodeEntered}>
+      <Button width={"1/2"} onPress={confirmCode}>
         Sign-in
       </Button>
     </VStack>
   );
 }
+

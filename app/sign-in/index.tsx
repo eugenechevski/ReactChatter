@@ -30,11 +30,9 @@ export default function SignInScreen() {
     const verificationResult = phone(fullPhoneNumber);
 
     if (verificationResult.isValid) {
-      // TODO: Send verification code to the phone number
       setIsPhoneNumberValid(true);
       router.replace(`/sign-in/phone-number-entered/${fullPhoneNumber}`);
     } else {
-      // TODO
       setIsPhoneNumberValid(false);
     }
   };
