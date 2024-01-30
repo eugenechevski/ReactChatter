@@ -1,6 +1,6 @@
 import { VStack, Text, Button, Input } from "native-base";
 import { useGlobalSearchParams } from "expo-router";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "expo-router";
 import auth, { FirebaseAuthTypes } from "@react-native-firebase/auth";
 import { useUserContext } from "@/context/user/UserContext";
@@ -8,20 +8,21 @@ import { useUserContext } from "@/context/user/UserContext";
 export default function PhoneNumberEnteredScreen() {
   const phoneNumber = useGlobalSearchParams()["phone-number"];
   const router = useRouter();
+
   const { dispatch } = useUserContext();
 
   const [code, setCode] = useState("");
-  const [confirm, setConfirm] = useState<FirebaseAuthTypes.ConfirmationResult>(null);
+  const [confirm, setConfirm] =
+    useState<FirebaseAuthTypes.ConfirmationResult>(null);
   const [isValidCode, setIsValidCode] = useState(true);
 
-  const confirmCode = async () => {
-    try {
-      await confirm.confirm(code);
-      setIsValidCode(true);
-    } catch (error) {
-      setIsValidCode(false);
-      console.log("Invalid code.")
-      console.log(error);
+  const confirmCode = () => {
+    console.log(code);
+    if (confirm) {
+      confirm.confirm(code).catch((error) => {
+        console.log(error);
+        setIsValidCode(false);
+      });
     }
   };
 
@@ -31,25 +32,32 @@ export default function PhoneNumberEnteredScreen() {
 
   const onAuthStateChanged = (user: FirebaseAuthTypes.User) => {
     if (user) {
-      dispatch({ type: "SET_USER", payload: user });
-    };
-  };
+      // Check if the user is new or not
+      if (user.metadata.creationTime === user.metadata.lastSignInTime) {
+        // New user
+        // Create a user with the phone number
+        router.replace(`/sign-in/create-account/${phoneNumber}`);
+      } else {
+        router.replace("/main-menu");
+        dispatch({ type: "SET_USER", payload: user });
+      }
 
-  const createAccount = async () => {
-    // Create a user with the phone number
+    }
   };
 
   const sendCode = async () => {
-    const confirm = await auth().signInWithPhoneNumber(phoneNumber as string);
-    setConfirm(confirm);
-  }
+    auth().verifyPhoneNumber(phoneNumber as string)
+    const confirmation = await auth().signInWithPhoneNumber(
+      phoneNumber as string
+    );
+    setConfirm(confirmation);
+  };
 
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
     return subscriber;
   }, []);
 
-  // Send code
   useEffect(() => {
     sendCode();
   }, []);
@@ -113,4 +121,3 @@ export default function PhoneNumberEnteredScreen() {
     </VStack>
   );
 }
-
