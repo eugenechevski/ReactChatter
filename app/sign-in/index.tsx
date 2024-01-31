@@ -10,7 +10,7 @@ import {
   Select,
 } from "native-base";
 import { customList, type CountryProperty } from "country-codes-list";
-import { phone } from "phone";
+import { phone as verifyPhone } from "phone";
 import { useState } from "react";
 import { useRouter } from "expo-router";
 
@@ -27,7 +27,7 @@ export default function SignInScreen() {
   const handleSignIn = () => {
     const fullPhoneNumber = "+ " + selectedPhoneExtension + " " + phoneNumber;
 
-    const verificationResult = phone(fullPhoneNumber);
+    const verificationResult = verifyPhone(fullPhoneNumber);
 
     if (verificationResult.isValid) {
       setIsPhoneNumberValid(true);
@@ -40,8 +40,8 @@ export default function SignInScreen() {
   return (
     <VStack
       width={"full"}
-      height={"full"}
-      space={"3"}
+      padding={"3"}
+      space={"4"}
       alignItems={"center"}
       justifyContent={"center"}
     >

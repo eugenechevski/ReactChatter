@@ -65,8 +65,8 @@ export default function PhoneNumberEnteredScreen() {
   return (
     <VStack
       width={"full"}
-      height={"full"}
       space={"3"}
+      paddingY={"10"}
       alignItems={"center"}
       justifyContent={"center"}
     >

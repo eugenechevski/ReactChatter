@@ -11,11 +11,10 @@ export default function SignInLayout() {
       width={"full"}
     >
       <Box
+        width={"90%"}
         shadow={"9"}
         rounded={"2xl"}
         backgroundColor={"main.dirty"}
-        width={"90%"}
-        height={"30%"}
         alignItems={"center"}>
         {/* Children */}
         <Slot />
