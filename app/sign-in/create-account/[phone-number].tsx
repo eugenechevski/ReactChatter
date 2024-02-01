@@ -8,11 +8,14 @@ import {
   FlatList,
 } from "native-base";
 import auth, { FirebaseAuthTypes } from "@react-native-firebase/auth";
+import firestore from "@react-native-firebase/firestore";
 import { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
+import { useRouter } from "expo-router";
+import { useUserContext } from "@/context/user/UserContext";
 
 type FormData = {
-  displayName: string;
+  username: string;
   email: string;
   password: string;
   confirmPassword: string;
@@ -20,14 +23,17 @@ type FormData = {
 
 export default function CreateAccountScreen() {
   const phoneNumber = useGlobalSearchParams()["phone-number"];
+  const router = useRouter();
+  const { dispatch } = useUserContext();
 
   const {
     control,
     handleSubmit,
     formState: { errors },
+    watch
   } = useForm<FormData>({
     defaultValues: {
-      displayName: "",
+      username: "",
       email: "",
       password: "",
       confirmPassword: "",
@@ -35,13 +41,54 @@ export default function CreateAccountScreen() {
   });
 
   const onSubmit = (data: FormData) => {
-    console.log("Form data: ", data);
+    console.log("User entered their data: ", data);
+    // Create the firestore instance of the user
+    
     auth()
       .createUserWithEmailAndPassword(data.email, data.password)
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
         console.log("User created: ", user);
+        return user;
+      })
+      .then((user) => {
+        // Create the firestore instance of the user
+        const userData = {
+          displayName: data.username,
+          id: user.uid,
+          status: "Active",
+          email: data.email,
+          phoneNumber: phoneNumber,
+          photoURL: "",
+          lastSeen: Date.now(),
+          settings: {
+            savedMessages: [],
+            privacy: {
+              blockedUsers: [] as string[],
+              lastSeenPolicy: "My contacts",
+              phoneNumberPolicy: "My contacts",
+              profilePhotoPolicy: "My contacts",
+              groupInvitePolicy: "My contacts",
+            },
+            notifications: {
+              messageNotifications: {
+                notify: true,
+                sound: 'default',
+              },
+              groupNotifications: {
+                notify: true,
+                sound: 'default',
+              },
+            },
+            storage: {},
+            language: "en",
+          },
+          chats: {}
+        } as User;
+        firestore().collection("users").doc(user.uid).set(userData);
+        dispatch({ type: "SET_USER", payload: userData });
+        router.replace("/main-menu");
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -76,12 +123,15 @@ export default function CreateAccountScreen() {
       </Text>
       <FormControl>
         <FormControl.Label _text={{ color: "main.crisp" }}>
-          Display name
+          Username
         </FormControl.Label>
         <Controller
           control={control}
           rules={{
             required: true,
+            minLength: 3,
+            maxLength: 20,
+            pattern: /^[A-Za-z0-9]+(?:[ _-][A-Za-z0-9]+)*$/,
           }}
           render={({ field: { onChange, value, onBlur } }) => (
             <Input
@@ -91,8 +141,14 @@ export default function CreateAccountScreen() {
               onBlur={onBlur}
             />
           )}
-          name="displayName"
+          name="username"
         />
+        {errors.username && (
+          <Text color={"warning.900"}>
+            Username must be 3-20 characters long and contain only letters,
+            numbers, spaces, hyphens, and underscores.
+          </Text>
+        )}
       </FormControl>
       <FormControl>
         <FormControl.Label _text={{ color: "main.crisp" }}>
@@ -102,6 +158,7 @@ export default function CreateAccountScreen() {
           control={control}
           rules={{
             required: true,
+            pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
           }}
           render={({ field: { onChange, value, onBlur } }) => (
             <Input
@@ -126,6 +183,8 @@ export default function CreateAccountScreen() {
           control={control}
           rules={{
             required: true,
+            minLength: 8,
+            pattern: /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/,
           }}
           render={({ field: { onChange, value, onBlur } }) => (
             <Input
@@ -138,7 +197,7 @@ export default function CreateAccountScreen() {
         />
         {errors.password && (
           <VStack>
-            <Text color={"warning.900"}>Password must:</Text>
+            <Text color={"warning.900"}>Your password must:</Text>
             <FlatList
               data={[
                 "be at least 8 characters long",
@@ -146,7 +205,7 @@ export default function CreateAccountScreen() {
                 "contain at least one special character",
               ]}
               renderItem={({ item }) => (
-                <Text color={"warning.900"}>{item}</Text>
+                <Text color={"warning.900"}>{"* " + item}</Text>
               )}
             />
           </VStack>
@@ -160,6 +219,7 @@ export default function CreateAccountScreen() {
           control={control}
           rules={{
             required: true,
+            validate: (value) => value === watch("password"),
           }}
           render={({ field: { onChange, value, onBlur } }) => (
             <Input

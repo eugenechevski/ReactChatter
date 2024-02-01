@@ -1,5 +1,4 @@
 import { createContext, useContext, useReducer } from "react";
-import { FirebaseAuthTypes } from "@react-native-firebase/auth";
 
 const UserContext = createContext(null);
 
@@ -13,13 +12,9 @@ const userReducer = (state, action) => {
     // Find the user in the database
     // Sets the user object in the state
     case "SET_USER":
-      const firebaseUser = action.payload as FirebaseAuthTypes.User;
-      // Perform a database query to find the user
-      const user = {} as User;
-
       return {
         ...state,
-        user: action.payload,
+        user: action.payload as User,
       };
 
     default:

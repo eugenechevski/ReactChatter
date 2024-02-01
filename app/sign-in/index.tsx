@@ -81,10 +81,6 @@ export default function SignInScreen() {
             keyboardType="phone-pad"
             _focus={{ borderColor: "main.sky", borderWidth: 2 }}
             width={"80%"}
-            rounded={"2xl"}
-            backgroundColor={"white"}
-            borderRadius={"full"}
-            fontSize={"md"}
             onChangeText={(text) => setPhoneNumber(text)}
             value={phoneNumber}
           ></Input>

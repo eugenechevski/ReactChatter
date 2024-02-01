@@ -44,6 +44,7 @@ export default function RootScreen() {
     if (user) {
       // User is signed in
       console.log("User is signed in");
+      console.log(user);
       dispatch({ type: "SET_USER", payload: user });
     } else {
       // User is signed out

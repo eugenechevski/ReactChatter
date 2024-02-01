@@ -8,19 +8,19 @@ declare interface UserSettings {
     savedMessages: string[];
     privacy: {
       blockedUsers: string[];
-      lastSeenPolicy: string;
-      phoneNumberPolicy: string;
-      profilePhotoPolicy: string;
-      groupInvitePolicy: string;
+      lastSeenPolicy: "My contacts" | "Nobody" | "Everyone";
+      phoneNumberPolicy: "My contacts" | "Nobody" | "Everyone";
+      profilePhotoPolicy: "My contacts" | "Nobody" | "Everyone";
+      groupInvitePolicy: "My contacts" | "Nobody" | "Everyone";
     };
     notifications: {
       messageNotifications: {
         notify: boolean;
-        sound: string;
+        sound: "default";
       };
       groupNotifications: {
         notify: boolean;
-        sound: string;
+        sound: "default";
       };
     };
     storage: Record<string, { dataStored: number }>;
