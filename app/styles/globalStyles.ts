@@ -1,4 +1,4 @@
-import { Button, extendTheme } from "native-base";
+import { Button, Input, extendTheme } from "native-base";
 import colors from "./colors";
 import { _Text } from "react-native";
 
@@ -22,5 +22,19 @@ export default extendTheme({
         shadow: "9",
       },
     },
+    Input: {
+      defaultProps: {
+        color: "main.crisp",
+        shadow: "9",
+        fontSize: "md",
+        variant: "filled",
+        borderRadius: "full",
+        backgroundColor: "main.dirty",
+        _focus: {
+          borderColor: "main.water",
+          borderWidth: 2,
+        },
+      }
+    }
   },
 });
