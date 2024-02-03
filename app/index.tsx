@@ -46,6 +46,7 @@ export default function RootScreen() {
       console.log("User is signed in");
       console.log(user);
       dispatch({ type: "SET_USER", payload: user });
+      router.replace("/main-menu/chats");
     } else {
       // User is signed out
       console.log("User is signed out");

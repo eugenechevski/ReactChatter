@@ -1,4 +1,4 @@
-import { Button, Input, extendTheme } from "native-base";
+import { extendTheme } from "native-base";
 import colors from "./colors";
 import { _Text } from "react-native";
 
