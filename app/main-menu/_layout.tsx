@@ -1,9 +1,19 @@
 import { VStack, HStack, Box } from "native-base";
 import { Slot } from "expo-router";
-import { FontAwesome } from "@expo/vector-icons";
-import colors from "@/styles/colors";
+import { Ionicons, AntDesign, Foundation } from "@expo/vector-icons";
+import { Link } from "expo-router";
 
 export default function MainMenuLayout() {
+  const iconsProps = {
+    width: "16",
+    height: "16",
+    borderRadius: "full",
+    backgroundColor: "main.water",
+    shadow: "9",
+    justifyContent: "center",
+    alignItems: "center",
+  };
+
   return (
     <VStack
       flex={1}
@@ -25,27 +35,20 @@ export default function MainMenuLayout() {
         borderTopColor={"black"}
         borderTopWidth={"2"}
       >
-        <Box
-          rounded={"full"}
-          borderWidth={6}
-          width={36}
-          height={36}
-          justifyContent={"center"}
-          alignItems={"center"}
-        >
-          <FontAwesome.Button
-            name="phone"
-            backgroundColor={colors.main.sky}
-            size={32}
-            iconStyle={{
-              color: "black",
-              alignSelf: "center",
-              textAlign: "center",
-              paddingLeft: 6,
-              width: 28,
-              height: 32,
-            }}
-          />
+        <Box {...iconsProps}>
+          <Link href="/main-menu/contacts">
+            <AntDesign name="contacts" size={48} />
+          </Link>
+        </Box>
+        <Box {...iconsProps}>
+          <Link href="/main-menu/chats">
+            <Ionicons name="chatbubble-ellipses-sharp" size={36} />
+          </Link>
+        </Box>
+        <Box {...iconsProps}>
+          <Link href="/settings">
+            <Foundation name="wrench" size={36} />
+          </Link>
         </Box>
       </HStack>
     </VStack>
