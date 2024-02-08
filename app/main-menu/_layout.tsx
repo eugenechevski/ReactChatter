@@ -2,18 +2,9 @@ import { VStack, HStack, Box } from "native-base";
 import { Slot } from "expo-router";
 import { Ionicons, AntDesign, Foundation } from "@expo/vector-icons";
 import { Link } from "expo-router";
+import IconBox from "@/components/IconBox";
 
 export default function MainMenuLayout() {
-  const iconsProps = {
-    width: "16",
-    height: "16",
-    borderRadius: "full",
-    backgroundColor: "main.water",
-    shadow: "9",
-    justifyContent: "center",
-    alignItems: "center",
-  };
-
   return (
     <VStack
       flex={1}
@@ -35,21 +26,21 @@ export default function MainMenuLayout() {
         borderTopColor={"black"}
         borderTopWidth={"2"}
       >
-        <Box {...iconsProps}>
+        <IconBox>
           <Link href="/main-menu/contacts">
             <AntDesign name="contacts" size={48} />
           </Link>
-        </Box>
-        <Box {...iconsProps}>
+        </IconBox>
+        <IconBox>
           <Link href="/main-menu/chats">
             <Ionicons name="chatbubble-ellipses-sharp" size={36} />
           </Link>
-        </Box>
-        <Box {...iconsProps}>
+        </IconBox>
+        <IconBox>
           <Link href="/settings">
             <Foundation name="wrench" size={36} />
           </Link>
-        </Box>
+        </IconBox>
       </HStack>
     </VStack>
   );
