@@ -12,6 +12,7 @@ import logo from "@/assets/images/logo-256.png";
 
 // Firebase
 import auth, { FirebaseAuthTypes } from "@react-native-firebase/auth";
+import firestore from "@react-native-firebase/firestore";
 
 // Context
 import { useUserContext } from "@/context/user/UserContext";
@@ -45,12 +46,17 @@ export default function RootScreen() {
       // User is signed in
       console.log("User is signed in");
       console.log(user);
-      dispatch({ type: "SET_USER", payload: user });
+      dispatch({ type: "SET_USER_CREDENTIAL", payload: user });
+      firestore().collection("users").doc(user.uid).get().then((doc) => {
+        if (doc.exists) {
+          dispatch({ type: "SET_USER_DATA", payload: doc.data() as User });
+        }
+      });
       router.replace("/main-menu/chats");
     } else {
       // User is signed out
       console.log("User is signed out");
-      router.replace("/sign-in/create-account/+17866176134");
+      router.replace("/sign-in");
     }
   }, [user, loading]);
 

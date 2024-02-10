@@ -1,10 +1,12 @@
-import { VStack, HStack, Input } from "native-base";
+import { VStack, HStack, Text } from "native-base";
 import { Ionicons } from "@expo/vector-icons";
 import IconBox from "@/components/IconBox";
 import ChatWidget from "@/components/ChatWidget";
 import SearchBar from "@/components/SearchBar";
 
 import { useState } from "react";
+import { useUserContext } from "@/context/user/UserContext";
+import auth, { FirebaseAuthTypes } from "@react-native-firebase/auth";
 
 const dummyChats = [
   {
@@ -28,6 +30,7 @@ const dummyChats = [
 ] as {metadata: ChatMeta, chat: Chat}[];
 
 export default function ChatsScreen() {
+  const { state } = useUserContext();
   const [search, setSearch] = useState("");
 
   return (
@@ -61,6 +64,10 @@ export default function ChatsScreen() {
         <IconBox width={"12"} height={"12"}>
           <Ionicons name="people" size={36} color={"black"} />
         </IconBox>
+
+        <Text>
+          {state.userData.displayName}
+        </Text>
       </HStack>
 
       {/* Search bar */}

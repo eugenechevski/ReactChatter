@@ -1,4 +1,3 @@
-import { useGlobalSearchParams } from "expo-router";
 import {
   VStack,
   Text,
@@ -22,7 +21,6 @@ type FormData = {
 };
 
 export default function CreateAccountScreen() {
-  const phoneNumber = useGlobalSearchParams()["phone-number"];
   const router = useRouter();
   const { dispatch } = useUserContext();
 
@@ -30,7 +28,7 @@ export default function CreateAccountScreen() {
     control,
     handleSubmit,
     formState: { errors },
-    watch
+    watch,
   } = useForm<FormData>({
     defaultValues: {
       username: "",
@@ -41,9 +39,8 @@ export default function CreateAccountScreen() {
   });
 
   const onSubmit = (data: FormData) => {
-    console.log("User entered their data: ", data);
-    // Create the firestore instance of the user
-    
+    console.table("User entered their data: ", data);
+
     auth()
       .createUserWithEmailAndPassword(data.email, data.password)
       .then((userCredential) => {
@@ -59,7 +56,6 @@ export default function CreateAccountScreen() {
           id: user.uid,
           status: "Active",
           email: data.email,
-          phoneNumber: phoneNumber,
           photoURL: "",
           lastSeen: Date.now(),
           settings: {
@@ -67,27 +63,28 @@ export default function CreateAccountScreen() {
             privacy: {
               blockedUsers: [] as string[],
               lastSeenPolicy: "My contacts",
-              phoneNumberPolicy: "My contacts",
               profilePhotoPolicy: "My contacts",
               groupInvitePolicy: "My contacts",
             },
             notifications: {
               messageNotifications: {
                 notify: true,
-                sound: 'default',
+                sound: "default",
               },
               groupNotifications: {
                 notify: true,
-                sound: 'default',
+                sound: "default",
               },
             },
             storage: {},
             language: "en",
           },
-          chats: {}
+          chats: {},
         } as User;
         firestore().collection("users").doc(user.uid).set(userData);
-        dispatch({ type: "SET_USER", payload: userData });
+
+        // Set the user's data in the context and navigate to the main menu
+        dispatch({ type: "SET_USER_DATA", payload: userData });
         router.replace("/main-menu");
       })
       .catch((error) => {
@@ -119,7 +116,7 @@ export default function CreateAccountScreen() {
       space={"4"}
     >
       <Text fontSize={"2xl"} shadow={"9"} color={"main.crisp"}>
-        Create account for {phoneNumber}
+        Create account
       </Text>
       <FormControl>
         <FormControl.Label _text={{ color: "main.crisp" }}>
@@ -187,11 +184,7 @@ export default function CreateAccountScreen() {
             pattern: /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/,
           }}
           render={({ field: { onChange, value, onBlur } }) => (
-            <Input
-              onChangeText={onChange}
-              value={value}
-              onBlur={onBlur}
-            />
+            <Input onChangeText={onChange} value={value} onBlur={onBlur} />
           )}
           name="password"
         />
@@ -222,11 +215,7 @@ export default function CreateAccountScreen() {
             validate: (value) => value === watch("password"),
           }}
           render={({ field: { onChange, value, onBlur } }) => (
-            <Input
-              onChangeText={onChange}
-              value={value}
-              onBlur={onBlur}
-            />
+            <Input onChangeText={onChange} value={value} onBlur={onBlur} />
           )}
           name="confirmPassword"
         />

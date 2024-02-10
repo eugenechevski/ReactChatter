@@ -4,7 +4,6 @@
             "uid": "string",
             "displayName": "string",
             "email": "string",
-            "phoneNumber": "string",
             "photoURL": "string",
             "status": "string",
             "lastSeen": "timestamp",
@@ -20,7 +19,6 @@
                 "privacy": {
                     "blockedUsers": ["$uid"],
                     "lastSeenPolicy": "string",
-                    "phoneNumberPolicy": "string",
                     "profilePhotoPolicy": "string",
                     "groupInvitePolicy": "string"
                 },

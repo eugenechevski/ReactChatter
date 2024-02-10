@@ -9,7 +9,6 @@ declare interface UserSettings {
     privacy: {
       blockedUsers: string[];
       lastSeenPolicy: "My contacts" | "Nobody" | "Everyone";
-      phoneNumberPolicy: "My contacts" | "Nobody" | "Everyone";
       profilePhotoPolicy: "My contacts" | "Nobody" | "Everyone";
       groupInvitePolicy: "My contacts" | "Nobody" | "Everyone";
     };
@@ -30,7 +29,6 @@ declare interface UserSettings {
 declare interface User {
     id: string;
     displayName: string;
-    phoneNumber: string;
     photoURL: string;
     status: string;
     lastSeen: number;

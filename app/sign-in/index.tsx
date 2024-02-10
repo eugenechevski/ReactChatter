@@ -1,105 +1,148 @@
 import {
-  Box,
-  Text,
-  Button,
   VStack,
-  HStack,
+  Text,
+  FormControl,
   Input,
-  InputGroup,
-  InputLeftAddon,
-  Select,
+  Button,
+  FlatList,
 } from "native-base";
-import { customList, type CountryProperty } from "country-codes-list";
-import { phone as verifyPhone } from "phone";
-import { useState } from "react";
-import { useRouter } from "expo-router";
+import auth, { FirebaseAuthTypes } from "@react-native-firebase/auth";
+import firestore from "@react-native-firebase/firestore";
+
+import { useForm, Controller } from "react-hook-form";
+
+import { useState, useEffect } from "react";
+import { useRouter, Link } from "expo-router";
+
+import { useUserContext } from "@/context/user/UserContext";
+
+type FormData = {
+  email: string;
+  password: string;
+};
 
 export default function SignInScreen() {
-  const phoneExtensions = customList(
-    "countryCallingCode" as CountryProperty,
-    "{countryNameEn}"
-  );
-  const [selectedPhoneExtension, setSelectedPhoneExtension] = useState("1");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [isPhoneNumberValid, setIsPhoneNumberValid] = useState(true);
   const router = useRouter();
+  const { dispatch } = useUserContext();
+  const [isFound, setIsFound] = useState(true);
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
 
-  const handleSignIn = () => {
-    const fullPhoneNumber = "+ " + selectedPhoneExtension + " " + phoneNumber;
-
-    const verificationResult = verifyPhone(fullPhoneNumber);
-
-    if (verificationResult.isValid) {
-      setIsPhoneNumberValid(true);
-      router.replace(`/sign-in/phone-number-entered/${fullPhoneNumber}`);
-    } else {
-      setIsPhoneNumberValid(false);
-    }
+  const onSubmit = (data: FormData) => {
+    // Check if the user has an account
+    auth()
+      .signInWithEmailAndPassword(data.email, data.password)
+      .catch((error) => {
+        if (error.code === "auth/user-not-found") {
+          console.table("User does not exist!");
+          setIsFound(false);
+        }
+      });
   };
+
+  const onAuthStateChanged = (user: FirebaseAuthTypes.User | null) => {
+    if (user) {
+      // Set user credential and data
+      dispatch({ type: "SET_USER_CREDENTIAL", payload: user });
+      firestore().collection("users").doc(user.uid).get().then((doc) => {
+        if (doc.exists) {
+          dispatch({ type: "SET_USER_DATA", payload: doc.data() as User });
+        }
+      });
+      router.push("/main-menu");
+    }
+  }
+
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber;
+  }, []);
 
   return (
     <VStack
-      width={"full"}
-      padding={"3"}
-      space={"4"}
-      alignItems={"center"}
       justifyContent={"center"}
+      alignItems={"center"}
+      padding={"8"}
+      width={"full"}
+      space={"4"}
     >
-      {/* Label */}
-      <Text fontSize={"xl"} shadow={"9"} color={"main.crisp"}>
-        Enter your phone number
+      <Text fontSize={"2xl"} shadow={"9"} color={"main.crisp"}>
+        Returning user
       </Text>
-
-      {/* Input */}
-      <HStack
-        width={"80%"}
-        space={2}
-        justifyItems={"center"}
-        alignItems={"center"}
-      >
-        <Select
-          borderColor={"main.dirty"}
-          width={"80%"}
-          selectedValue={selectedPhoneExtension}
-          _selectedItem={{
-            bg: "main.dirty",
-            _text: { color: "main.crisp" },
+      <FormControl>
+        <FormControl.Label _text={{ color: "main.crisp" }}>
+          Email
+        </FormControl.Label>
+        <Controller
+          control={control}
+          rules={{
+            required: true,
+            pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
           }}
-          onValueChange={(country) => setSelectedPhoneExtension(country)}
-        >
-          {Object.keys(phoneExtensions).map((ext) => (
-            <Select.Item
-              key={ext}
-              label={"+ " + ext + " " + phoneExtensions[ext]}
-              value={ext}
+          render={({ field: { onChange, value, onBlur } }) => (
+            <Input
+              placeholder="johndoe@mail.com"
+              keyboardType="email-address"
+              onChangeText={onChange}
+              onBlur={onBlur}
+              value={value}
             />
-          ))}
-        </Select>
-        <InputGroup width={"70%"} height={"10"}>
-          <InputLeftAddon children={"+ " + selectedPhoneExtension} />
-          <Input
-            keyboardType="phone-pad"
-            _focus={{ borderColor: "main.sky", borderWidth: 2 }}
-            width={"80%"}
-            onChangeText={(text) => setPhoneNumber(text)}
-            value={phoneNumber}
-          ></Input>
-        </InputGroup>
-      </HStack>
-
-      {/* Error message label */}
-      {!isPhoneNumberValid ? (
-        <Text fontSize={"md"} color={"red.500"}>
-          The phone number is invalid, try again.
+          )}
+          name="email"
+        />
+        {errors.email && (
+          <Text color={"warning.900"}>Email should be valid.</Text>
+        )}
+      </FormControl>
+      <FormControl>
+        <FormControl.Label _text={{ color: "main.crisp" }}>
+          Password
+        </FormControl.Label>
+        <Controller
+          control={control}
+          rules={{
+            required: true,
+            minLength: 8,
+            pattern: /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/,
+          }}
+          render={({ field: { onChange, value, onBlur } }) => (
+            <Input onChangeText={onChange} value={value} onBlur={onBlur} />
+          )}
+          name="password"
+        />
+        {errors.password && (
+          <VStack>
+            <Text color={"warning.900"}>Your password must:</Text>
+            <FlatList
+              data={[
+                "be at least 8 characters long",
+                "contain at least one number",
+                "contain at least one special character",
+              ]}
+              renderItem={({ item }) => (
+                <Text color={"warning.900"}>{"* " + item}</Text>
+              )}
+            />
+          </VStack>
+        )}
+      </FormControl>
+      <Link href={'/sign-in/create-account'}>
+        <Text color={"main.crisp"} shadow={"9"}>
+          Create an account
         </Text>
-      ) : (
-        <></>
+      </Link>
+      {!isFound && (
+        <Text color={"warning.900"}>User does not exist. Please sign up.</Text>
       )}
-
-      {/* Button */}
-      <Button width={"1/2"} onPress={handleSignIn}>
-        Send
-      </Button>
+      <Button onPress={handleSubmit(onSubmit)} width={32}>Sign-in</Button>
     </VStack>
   );
 }
