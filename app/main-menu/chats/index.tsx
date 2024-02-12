@@ -1,19 +1,26 @@
-import { VStack, HStack, Text } from "native-base";
+import { VStack, HStack, Text, ScrollView } from "native-base";
+
 import { Ionicons } from "@expo/vector-icons";
+
 import IconBox from "@/components/IconBox";
 import ChatWidget from "@/components/ChatWidget";
 import SearchBar from "@/components/SearchBar";
+import { useUserContext } from "@/context/user/UserContext";
 
 import { useState } from "react";
-import { useUserContext } from "@/context/user/UserContext";
+
 import auth, { FirebaseAuthTypes } from "@react-native-firebase/auth";
 
-const dummyChats = [
-  {
+import nanoid from '@/utils/nanoid';
+
+const dummyChats = [] as { metadata: ChatMeta; chat: Chat }[];
+
+for (let i = 0; i < 10; i++) {
+  dummyChats.push({
     metadata: {
       isMuted: false,
       isPinned: false,
-      unreadCount: 0,
+      unreadCount: 1,
     },
     chat: {
       id: "1",
@@ -24,10 +31,10 @@ const dummyChats = [
       members: ["1", "2"],
       creator: "1",
       messages: ["Hey, how are you?", "I'm good, you?"],
-      lastMessage: "I'm good, you?"
-    }
-  }
-] as {metadata: ChatMeta, chat: Chat}[];
+      lastMessage: "I'm good, you?",
+    },
+  });
+}
 
 export default function ChatsScreen() {
   const { state } = useUserContext();
@@ -64,21 +71,19 @@ export default function ChatsScreen() {
         <IconBox width={"12"} height={"12"}>
           <Ionicons name="people" size={36} color={"black"} />
         </IconBox>
-
-        <Text>
-          {state.userData.displayName}
-        </Text>
       </HStack>
 
       {/* Search bar */}
       <SearchBar value={search} setValue={setSearch} />
 
       {/* Chats */}
-      <VStack maxHeight={"90%"} overflowY={"scroll"}>
-        {dummyChats.map(({metadata, chat}) => (
-          <ChatWidget key={chat.id} chat={chat} meta={metadata}/>
-        ))}
-      </VStack>
+      <ScrollView height={"container"} borderTopWidth={"2"} borderTopColor={"main.crisp"}>
+        <VStack height={"full"}>
+          {dummyChats.map(({ metadata, chat }) => (
+            <ChatWidget key={nanoid()} chat={chat} meta={metadata} />
+          ))}
+        </VStack>
+      </ScrollView>
     </VStack>
   );
 }

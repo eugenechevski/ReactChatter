@@ -23,7 +23,7 @@ export default function MainMenuLayout() {
         justifyContent={"space-between"}
         alignItems={"center"}
         paddingX={"5"}
-        borderTopColor={"black"}
+        borderTopColor={"main.crisp"}
         borderTopWidth={"2"}
       >
         <IconBox>

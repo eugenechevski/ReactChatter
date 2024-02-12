@@ -18,12 +18,12 @@ export default function ChatWidget({
       justifyContent={"space-between"}
       alignItems={"center"}
       padding={"5"}
-      borderTopColor={"black"}
-      borderTopWidth={"2"}
+      borderBottomColor={"main.crisp"}
+      borderBottomWidth={"2"}
       {...styleProps}
     >
       {/* Chat photo */}
-      <IconBox width="20" height="20">
+      <IconBox width="10" height="10">
         <Ionicons name="person" size={32} color={"black"} />
       </IconBox>
 
@@ -33,13 +33,16 @@ export default function ChatWidget({
         height={"full"}
         justifyContent={"center"}
         alignItems={"center"}
+        _text={{
+          color: "main.dirty",
+        }}
       >
-        <Text>{chat?.name}</Text>
+        <Text fontSize="16" fontWeight={"bold"}>{chat?.name}</Text>
         <Text>{chat?.lastMessage}</Text>
       </VStack>
 
       {/* Unread count */}
-      <IconBox width="20" height="20">
+      <IconBox width="10" height="10">
         <Text>{meta.unreadCount}</Text>
       </IconBox>
     </HStack>
