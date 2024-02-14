@@ -14,7 +14,7 @@ export default function ChatWidget({
   return (
     <HStack
       width={"full"}
-      height={"10%"}
+      height={"20"}
       justifyContent={"space-between"}
       alignItems={"center"}
       padding={"5"}
@@ -33,12 +33,15 @@ export default function ChatWidget({
         height={"full"}
         justifyContent={"center"}
         alignItems={"center"}
-        _text={{
-          color: "main.dirty",
-        }}
       >
-        <Text fontSize="16" fontWeight={"bold"}>{chat?.name}</Text>
-        <Text>{chat?.lastMessage}</Text>
+        <Text fontSize="lg" fontWeight={"bold"} color={"main.crisp"}>
+          {chat?.name}
+        </Text>
+        <Text color={"main.crisp"}>
+          {chat?.lastMessage.length > 16
+            ? chat.lastMessage.slice(0, 16) + "..."
+            : chat.lastMessage}
+        </Text>
       </VStack>
 
       {/* Unread count */}

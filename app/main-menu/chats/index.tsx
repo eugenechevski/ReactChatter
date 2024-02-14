@@ -11,11 +11,11 @@ import { useState } from "react";
 
 import auth, { FirebaseAuthTypes } from "@react-native-firebase/auth";
 
-import nanoid from '@/utils/nanoid';
+import nanoid from "@/utils/nanoid";
 
 const dummyChats = [] as { metadata: ChatMeta; chat: Chat }[];
 
-for (let i = 0; i < 10; i++) {
+for (let i = 0; i < 8; i++) {
   dummyChats.push({
     metadata: {
       isMuted: false,
@@ -30,8 +30,12 @@ for (let i = 0; i < 10; i++) {
       isGroup: false,
       members: ["1", "2"],
       creator: "1",
-      messages: ["Hey, how are you?", "I'm good, you?"],
-      lastMessage: "I'm good, you?",
+      messages: [
+        "Hey, how are you?",
+        "I'm good, you? I was wondering if you could help me with something.",
+      ],
+      lastMessage:
+        "I'm good, you? I was wondering if you could help me with something.",
     },
   });
 }
@@ -47,7 +51,7 @@ export default function ChatsScreen() {
       alignItems="center"
       justifyContent="start"
       space={8}
-      paddingY={"16"}
+      paddingTop={"16"}
     >
       <HStack
         width={"full"}
@@ -77,8 +81,8 @@ export default function ChatsScreen() {
       <SearchBar value={search} setValue={setSearch} />
 
       {/* Chats */}
-      <ScrollView height={"container"} borderTopWidth={"2"} borderTopColor={"main.crisp"}>
-        <VStack height={"full"}>
+      <ScrollView borderTopWidth={"2"} borderTopColor={"main.crisp"}>
+        <VStack>
           {dummyChats.map(({ metadata, chat }) => (
             <ChatWidget key={nanoid()} chat={chat} meta={metadata} />
           ))}

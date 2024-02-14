@@ -16,6 +16,7 @@ export default function SearchBar({
       justifyContent={"center"}
       space={"4"}
       alignItems={"center"}
+      shadow={"9"}
     >
       <Input
         width={"3/4"}
