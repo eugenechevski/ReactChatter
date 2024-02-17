@@ -1,8 +1,8 @@
 import { VStack, HStack, Box } from "native-base";
 import { Slot } from "expo-router";
-import { Ionicons, AntDesign, Foundation } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import IconBox from "@/components/IconBox";
+import MainIcon from "@/components/MainIcon";
 
 export default function MainMenuLayout() {
   return (
@@ -28,17 +28,17 @@ export default function MainMenuLayout() {
       >
         <IconBox>
           <Link href="/main-menu/contacts">
-            <AntDesign name="contacts" size={48} />
+            <MainIcon iconName={"contacts"} provider="ant" size={48} />
           </Link>
         </IconBox>
         <IconBox>
           <Link href="/main-menu/chats">
-            <Ionicons name="chatbubble-ellipses-sharp" size={36} />
+            <MainIcon iconName={"chatbubble-ellipses"} provider="ion" />
           </Link>
         </IconBox>
         <IconBox>
           <Link href="/settings">
-            <Foundation name="wrench" size={36} />
+            <MainIcon iconName={"wrench"} provider="foundation" />
           </Link>
         </IconBox>
       </HStack>

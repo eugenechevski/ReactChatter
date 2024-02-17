@@ -1,6 +1,6 @@
 import { HStack, VStack, Text } from "native-base";
 import IconBox from "@/components/IconBox";
-import { Ionicons } from "@expo/vector-icons";
+import MainIcon from "./MainIcon";
 
 export default function ChatWidget({
   styleProps,
@@ -24,7 +24,7 @@ export default function ChatWidget({
     >
       {/* Chat photo */}
       <IconBox width="10" height="10">
-        <Ionicons name="person" size={32} color={"black"} />
+        <MainIcon iconName="person" provider="ion" size={32} />
       </IconBox>
 
       {/* Chat name & latest message */}

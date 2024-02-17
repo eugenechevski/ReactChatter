@@ -1,10 +1,17 @@
-import { VStack, HStack, Text, ScrollView } from "native-base";
-
-import { Ionicons } from "@expo/vector-icons";
+import {
+  VStack,
+  HStack,
+  Text,
+  ScrollView,
+  useColorMode,
+  useColorModeValue,
+} from "native-base";
 
 import IconBox from "@/components/IconBox";
 import ChatWidget from "@/components/ChatWidget";
 import SearchBar from "@/components/SearchBar";
+import MainIcon from "@/components/MainIcon";
+
 import { useUserContext } from "@/context/user/UserContext";
 
 import { useState } from "react";
@@ -44,6 +51,9 @@ export default function ChatsScreen() {
   const { state } = useUserContext();
   const [search, setSearch] = useState("");
 
+  const { toggleColorMode } = useColorMode();
+  const colorIcon = useColorModeValue("moon", "sunny");
+
   return (
     <VStack
       height={"full"}
@@ -61,19 +71,23 @@ export default function ChatsScreen() {
         justifyContent={"space-between"}
         padding={"4"}
       >
-        {/* Dark mode button */}
+        {/* Color mode button */}
         <IconBox width={"12"} height={"12"}>
-          <Ionicons name="moon" size={36} color={"black"} />
+          <MainIcon
+            iconName={colorIcon}
+            provider="ion"
+            onPress={toggleColorMode}
+          />
         </IconBox>
 
         {/* User photo */}
         <IconBox>
-          <Ionicons name="person" size={52} color={"black"} />
+          <MainIcon iconName="person" provider="ion" size={52} />
         </IconBox>
 
         {/* Add group button */}
         <IconBox width={"12"} height={"12"}>
-          <Ionicons name="people" size={36} color={"black"} />
+          <MainIcon iconName="people" provider="ion" />
         </IconBox>
       </HStack>
 

@@ -1,6 +1,9 @@
 import { Box } from "native-base";
 import React from "react";
 
+/**
+ * A reusable wrapper around icon buttons
+ */
 export default function IconBox({ children, ...props }): React.ReactElement {
   return (
     <Box

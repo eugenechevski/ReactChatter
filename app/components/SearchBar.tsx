@@ -1,6 +1,6 @@
 import { HStack, Input } from "native-base";
-import { Ionicons } from "@expo/vector-icons";
 import IconBox from "@/components/IconBox";
+import MainIcon from "@/components/MainIcon";
 
 export default function SearchBar({
   value,
@@ -31,7 +31,7 @@ export default function SearchBar({
         placeholderTextColor={"main.water"}
       />
       <IconBox width={"12"} height={"12"}>
-        <Ionicons name="search" size={36} color={"black"} />
+        <MainIcon provider="ion" iconName="search" />
       </IconBox>
     </HStack>
   );
