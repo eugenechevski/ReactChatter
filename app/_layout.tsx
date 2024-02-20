@@ -10,10 +10,9 @@ import theme from "@/styles/globalStyles";
 // Context
 import { ContextProvider } from "@/context/Context";
 
-/*
-// React Native
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+// Color persistence
 const colorModeManager: StorageManager = {
   get: async () => {
     try {
@@ -31,12 +30,11 @@ const colorModeManager: StorageManager = {
     }
   },
 };
-*/
 
 export default function RootLayout() {
   return (
     <ContextProvider>
-      <NativeBaseProvider theme={theme} /*colorModeManager={colorModeManager}*/>
+      <NativeBaseProvider theme={theme} colorModeManager={colorModeManager}>
         <Box
           backgroundColor={"main.sky"}
           _dark={{ backgroundColor: "main.dark" }}
