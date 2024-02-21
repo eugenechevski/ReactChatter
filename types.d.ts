@@ -59,3 +59,9 @@ declare interface Message {
     read: boolean;
     delivered: boolean;
 }
+
+declare interface Contact {
+    name: string;
+    hasApp: boolean;
+    user: User | null;
+}

@@ -16,7 +16,6 @@ import { useUserContext } from "@/context/user/UserContext";
 
 import { useState } from "react";
 
-import auth, { FirebaseAuthTypes } from "@react-native-firebase/auth";
 
 import nanoid from "@/utils/nanoid";
 

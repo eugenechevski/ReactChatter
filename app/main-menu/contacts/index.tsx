@@ -1,15 +1,65 @@
-import { Box, Text } from "native-base";
+import { VStack, HStack, Text, Box, ScrollView } from "native-base";
+import SearchBar from "@/components/SearchBar";
+import IconBox from "@/components/IconBox";
+import MainIcon from "@/components/MainIcon";
+import ContactWidget from "@/components/ContactWidget";
+import { useState } from "react";
+import nanoid from "@/utils/nanoid";
+
+const dummyContacts: Contact[] = [
+  {
+    name: "John Doe",
+    hasApp: false,
+    user: null,
+  },
+];
 
 export default function ContactsScreen() {
+  const [search, setSearch] = useState("");
+
+  const handleSort = () => {};
+
   return (
-    <Box
-      flex={1}
+    <VStack
       height={"full"}
       width={"full"}
       alignItems="center"
-      justifyContent="center"
+      justifyContent="start"
+      space={8}
+      paddingTop={"16"}
     >
-      <Text>Contacts</Text>
-    </Box>
+      <HStack
+        width={"full"}
+        justifyContent="start"
+        alignItems={"center"}
+        padding={"4"}
+        height={"10%"}
+      >
+        <IconBox width={12} height={12}>
+          <MainIcon provider="material" iconName="sort" size={26}/>
+        </IconBox>
+
+        <Text
+          color={"main.crisp"}
+          fontSize={"2xl"}
+          fontWeight={"bold"}
+          ml={"1/4"}
+        >
+          Contacts
+        </Text>
+      </HStack>
+
+      {/* Search bar */}
+      <SearchBar value={search} setValue={setSearch} />
+
+      {/* Contacts */}
+      <ScrollView borderTopWidth={"2"} borderTopColor={"main.crisp"}>
+        <VStack>
+          {dummyContacts.map((contact) => (
+            <ContactWidget key={nanoid()} contact={contact} />
+          ))}
+        </VStack>
+      </ScrollView>
+    </VStack>
   );
 }

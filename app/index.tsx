@@ -52,7 +52,7 @@ export default function RootScreen() {
           dispatch({ type: "SET_USER_DATA", payload: doc.data() as User });
         }
       });
-      router.replace("/main-menu/chats");
+      router.replace("/main-menu/contacts");
     } else {
       // User is signed out
       console.log("User is signed out");
