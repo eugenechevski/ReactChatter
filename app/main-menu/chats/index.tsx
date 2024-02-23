@@ -1,7 +1,6 @@
 import {
   VStack,
   HStack,
-  Text,
   ScrollView,
   useColorMode,
   useColorModeValue,
@@ -15,7 +14,6 @@ import MainIcon from "@/components/MainIcon";
 import { useUserContext } from "@/context/user/UserContext";
 
 import { useState } from "react";
-
 
 import nanoid from "@/utils/nanoid";
 
