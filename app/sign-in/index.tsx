@@ -16,6 +16,8 @@ import { useRouter, Link } from "expo-router";
 
 import { useUserContext } from "@/context/user/UserContext";
 
+import { MainUser } from "@/types";
+
 type FormData = {
   email: string;
   password: string;
@@ -54,7 +56,7 @@ export default function SignInScreen() {
       dispatch({ type: "SET_USER_CREDENTIAL", payload: user });
       firestore().collection("users").doc(user.uid).get().then((doc) => {
         if (doc.exists) {
-          dispatch({ type: "SET_USER_DATA", payload: doc.data() as User });
+          dispatch({ type: "SET_USER_DATA", payload: doc.data() as MainUser });
         }
       });
       router.push("/main-menu");

@@ -1,14 +1,16 @@
 import { FirebaseAuthTypes } from "@react-native-firebase/auth";
 import { createContext, useContext, useReducer, Dispatch } from "react";
+import { MainUser } from "@/types";
+
 
 interface State {
   userCredential: FirebaseAuthTypes.User;
-  userData: User;
+  userData: MainUser;
 }
 
 type Action = 
   | { type: 'SET_USER_CREDENTIAL'; payload: FirebaseAuthTypes.User }
-  | { type: 'SET_USER_DATA'; payload: User };
+  | { type: 'SET_USER_DATA'; payload: MainUser };
 
 interface UserContextProps {
   state: State;
@@ -19,7 +21,7 @@ const UserContext = createContext<UserContextProps | null>(null);
 
 const initialState: State = {
   userCredential: {} as FirebaseAuthTypes.User,
-  userData: {} as User
+  userData: {} as MainUser
 };
 
 const userReducer = (state: State, action: Action): State => {

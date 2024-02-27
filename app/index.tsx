@@ -8,6 +8,7 @@ import { VStack, Text, Image, Button } from "native-base";
 import { useRouter } from "expo-router";
 
 // Styles and assets
+// @ts-ignore
 import logo from "@/assets/images/logo-256.png";
 
 // Firebase
@@ -16,6 +17,9 @@ import firestore from "@react-native-firebase/firestore";
 
 // Context
 import { useUserContext } from "@/context/user/UserContext";
+
+// Types
+import { MainUser } from "@/types";
 
 export default function RootScreen() {
   const router = useRouter();
@@ -49,7 +53,7 @@ export default function RootScreen() {
       dispatch({ type: "SET_USER_CREDENTIAL", payload: user });
       firestore().collection("users").doc(user.uid).get().then((doc) => {
         if (doc.exists) {
-          dispatch({ type: "SET_USER_DATA", payload: doc.data() as User });
+          dispatch({ type: "SET_USER_DATA", payload: doc.data() as MainUser });
         }
       });
       router.replace("/main-menu/contacts");

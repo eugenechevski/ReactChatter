@@ -17,7 +17,9 @@ import { useState } from "react";
 
 import nanoid from "@/utils/nanoid";
 
-const dummyChats = [] as { metadata: ChatMeta; chat: Chat }[];
+import { MainChat, MainChatMeta } from "@/types";
+
+const dummyChats = [] as { metadata: MainChatMeta; chat: MainChat }[];
 
 for (let i = 0; i < 8; i++) {
   dummyChats.push({

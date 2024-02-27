@@ -1,10 +1,11 @@
 import { createContext, useContext, useReducer, Dispatch } from "react";
+import { MainContact } from "@/types";
 
 interface State {
-  contacts: Contact[];
+  contacts: MainContact[];
 }
 
-type Action = { type: "SET_CONTACTS"; payload: Contact[] };
+type Action = { type: "SET_CONTACTS"; payload: MainContact[] };
 
 interface ContactsContextProps {
   state: State;

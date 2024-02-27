@@ -13,6 +13,8 @@ import { useForm, Controller } from "react-hook-form";
 import { useRouter } from "expo-router";
 import { useUserContext } from "@/context/user/UserContext";
 
+import { MainUser } from "@/types";
+
 type FormData = {
   username: string;
   email: string;
@@ -80,7 +82,7 @@ export default function CreateAccountScreen() {
             language: "en",
           },
           chats: {},
-        } as User;
+        } as MainUser;
         firestore().collection("users").doc(user.uid).set(userData);
 
         // Set the user's data in the context and navigate to the main menu

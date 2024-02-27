@@ -1,5 +1,5 @@
 // NativeBase
-import { NativeBaseProvider, Box } from "native-base";
+import { NativeBaseProvider, Box, ColorMode } from "native-base";
 
 // Expo
 import { Slot } from "expo-router";
@@ -13,7 +13,7 @@ import { ContextProvider } from "@/context/Context";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Color persistence
-const colorModeManager: StorageManager = {
+const colorModeManager = {
   get: async () => {
     try {
       let val = await AsyncStorage.getItem('@color-mode');
