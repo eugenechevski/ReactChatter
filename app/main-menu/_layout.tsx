@@ -6,14 +6,17 @@ import MainIcon from "@/components/MainIcon";
 import { useContactsContext } from "@/context/contacts/ContactsContext";
 import { useEffect } from "react";
 import * as Contacts from "expo-contacts";
-import firestore from '@react-native-firebase/firestore';
+import firestore from "@react-native-firebase/firestore";
 import { MainContact, MainUser } from "@/types";
+import { Platform } from "react-native";
 
 export default function MainMenuLayout() {
   const { dispatch } = useContactsContext();
 
-  // Fetch user's contacts
+  // Fetch user's contacts if on mobile
   useEffect(() => {
+    if (Platform.OS === "web") return;
+
     (async () => {
       // Request contacts permission
       const { status } = await Contacts.requestPermissionsAsync();
@@ -21,14 +24,19 @@ export default function MainMenuLayout() {
       if (status === "granted") {
         // Fetch contacts from the user's device
         const { data } = await Contacts.getContactsAsync({
-          fields: [Contacts.Fields.Name, Contacts.Fields.Emails, Contacts.Fields.PhoneNumbers],
+          fields: [
+            Contacts.Fields.Name,
+            Contacts.Fields.Emails,
+            Contacts.Fields.PhoneNumbers,
+          ],
         });
+
+        console.log(data);
 
         if (data.length > 0) {
           // Build contacts array
           const contacts: MainContact[] = [];
           for (const contact of data) {
-            
             const mainContact: MainContact = {
               name: contact.name,
               hasApp: false,
@@ -37,10 +45,13 @@ export default function MainMenuLayout() {
 
             // Determine if the contact has the app
             // If so, fetch their user data from firestore
-            const user = await firestore().collection('users').where('phoneNumber', '==', contact.phoneNumbers[0].number).get();
+            const user = await firestore()
+              .collection("users")
+              .where("phoneNumber", "==", contact.phoneNumbers[0].number)
+              .get();
             if (!user.empty) {
               mainContact.hasApp = true;
-              mainContact.user = (user.docs[0].data() as MainUser);
+              mainContact.user = user.docs[0].data() as MainUser;
             }
 
             contacts.push(mainContact);
@@ -50,7 +61,7 @@ export default function MainMenuLayout() {
           dispatch({ type: "SET_CONTACTS", payload: contacts });
         }
       }
-    })
+    })();
   }, []);
 
   return (

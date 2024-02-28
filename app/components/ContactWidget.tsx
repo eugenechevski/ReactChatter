@@ -1,13 +1,15 @@
 import { HStack, VStack, Text } from "native-base";
 import IconBox from "@/components/IconBox";
 import MainIcon from "./MainIcon";
+import { MainContact } from "@/types";
+import { Image } from "expo-image";
 
 export default function ContactWidget({
   styleProps,
   contact,
 }: {
   styleProps?: { [key: string]: any };
-  contact: Contact;
+  contact: MainContact;
 }) {
   return (
     <HStack
@@ -20,12 +22,20 @@ export default function ContactWidget({
       borderBottomWidth={"2"}
       {...styleProps}
     >
-      {/* Chat photo // TODO: replace with photo */}
+      {/* Contact photo */}
       <IconBox width="10" height="10">
-        <MainIcon iconName="person" provider="ion" size={32} />
+        {contact.image ? (
+          <Image
+            source={contact.image.uri}
+            alt={contact.name}
+            contentFit="cover"
+          />
+        ) : (
+          <MainIcon iconName="person" provider="ion" size={32} />
+        )}
       </IconBox>
 
-      {/* Chat name & latest message */}
+      {/* Contact name */}
       <VStack
         width={"full"}
         height={"full"}
