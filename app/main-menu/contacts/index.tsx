@@ -8,7 +8,7 @@ import nanoid from "@/utils/nanoid";
 import { useContactsContext } from "@/context/contacts/ContactsContext";
 
 export default function ContactsScreen() {
-  const [search, setSearch] = useState("");
+  const [searchValue, setSearchValue] = useState("");
   const { state } = useContactsContext();
 
   const handleSort = () => {};
@@ -44,14 +44,17 @@ export default function ContactsScreen() {
       </HStack>
 
       {/* Search bar */}
-      <SearchBar value={search} setValue={setSearch} />
+      <SearchBar value={searchValue} setValue={setSearchValue} />
 
       {/* Contacts */}
       <ScrollView borderTopWidth={"2"} borderTopColor={"main.crisp"}>
         <VStack>
-          {state.contacts.map((contact) => (
-            <ContactWidget key={nanoid()} contact={contact} />
-          ))}
+          {/* Filtered contacts */}
+          {state.contacts
+            .filter((value) => value.name.includes(searchValue))
+            .map((contact) => (
+              <ContactWidget key={nanoid()} contact={contact} />
+            ))}
         </VStack>
       </ScrollView>
     </VStack>
