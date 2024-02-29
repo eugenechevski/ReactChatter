@@ -2,7 +2,7 @@
 
 import { useColorModeValue } from "native-base";
 import colors from "@/styles/colors";
-import { Ionicons, AntDesign, Foundation, MaterialIcons } from "@expo/vector-icons";
+import { Ionicons, AntDesign, Foundation, MaterialCommunityIcons } from "@expo/vector-icons";
 
 type IconProvider = "ion" | "ant" | "foundation" | "material";
 type IonIcons =
@@ -14,8 +14,8 @@ type IonIcons =
   | "search";
 type AntDesign = "contacts";
 type Foundation = "wrench";
-type MaterialIcons = "sort";
-type IconName = IonIcons | AntDesign | Foundation | MaterialIcons;
+type MaterialCommunityIcons = "sort";
+type IconName = IonIcons | AntDesign | Foundation | MaterialCommunityIcons;
 type IconsObject = { [key in IconProvider]: JSX.Element };
 
 export default function MainIcon({
@@ -61,8 +61,8 @@ export default function MainIcon({
       />
     ),
     material: (
-      <MaterialIcons
-        name={iconName as MaterialIcons}
+      <MaterialCommunityIcons
+        name={iconName as MaterialCommunityIcons}
         size={size ?? 36}
         color={iconColor}
         onPress={onPress}
