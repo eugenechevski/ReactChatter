@@ -11,47 +11,27 @@ import ChatWidget from "@/components/ChatWidget";
 import SearchBar from "@/components/SearchBar";
 import MainIcon from "@/components/MainIcon";
 
-import { useUserContext } from "@/context/user/UserContext";
+import { useChatsContext } from "@/context/chats/ChatsContext";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import nanoid from "@/utils/nanoid";
 
-import { MainChat, MainChatMeta } from "@/types";
-
-const dummyChats = [] as { metadata: MainChatMeta; chat: MainChat }[];
-
-for (let i = 0; i < 8; i++) {
-  dummyChats.push({
-    metadata: {
-      isMuted: false,
-      isPinned: false,
-      unreadCount: 1,
-    },
-    chat: {
-      id: "1",
-      name: "John Doe",
-      photoURL: "",
-      description: "",
-      isGroup: false,
-      members: ["1", "2"],
-      creator: "1",
-      messages: [
-        "Hey, how are you?",
-        "I'm good, you? I was wondering if you could help me with something.",
-      ],
-      lastMessage:
-        "I'm good, you? I was wondering if you could help me with something.",
-    },
-  });
-}
+import { MainChat } from "@/types";
 
 export default function ChatsScreen() {
-  const { state } = useUserContext();
-  const [search, setSearch] = useState("");
+  const { state } = useChatsContext();
+  const [chats, setChats] = useState<MainChat[]>([]);
+
+  const [searchValue, setSearchValue] = useState("");
 
   const { toggleColorMode } = useColorMode();
   const colorIcon = useColorModeValue("moon", "sunny");
+
+  // Load contacts
+  useEffect(() => {
+    setChats(Object.values(state.chats));
+  }, [state.chats]);
 
   return (
     <VStack
@@ -91,14 +71,16 @@ export default function ChatsScreen() {
       </HStack>
 
       {/* Search bar */}
-      <SearchBar value={search} setValue={setSearch} />
+      <SearchBar value={searchValue} setValue={setSearchValue} />
 
       {/* Chats */}
       <ScrollView borderTopWidth={"2"} borderTopColor={"main.crisp"}>
         <VStack>
-          {dummyChats.map(({ metadata, chat }) => (
-            <ChatWidget key={nanoid()} chat={chat} meta={metadata} />
-          ))}
+          {chats
+            .filter((value) => value.name.includes(searchValue))
+            .map((value) => (
+              <ChatWidget key={nanoid()} chat={value} />
+            ))}
         </VStack>
       </ScrollView>
     </VStack>
