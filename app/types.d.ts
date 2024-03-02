@@ -43,18 +43,19 @@ declare interface MainUser {
 declare interface MainChat {
     id: string;
     name: string;
+    meta: MainChatMeta;
     photoURL: string;
     description: string;
     isGroup: boolean;
     members: string[];
-    messages: string[];
+    messages: { [messageId: string]: string }; // indexed ids of messages
     creator: string;
     lastMessage: string;
 }
 
 declare interface MainMessage {
     id: string;
-    chatID: string;
+    chatId: string;
     sender: string;
     content: string;
     time: number;

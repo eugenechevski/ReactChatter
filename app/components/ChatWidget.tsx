@@ -1,15 +1,14 @@
 import { HStack, VStack, Text } from "native-base";
 import IconBox from "@/components/IconBox";
 import MainIcon from "./MainIcon";
+import { MainChat } from "@/types";
 
 export default function ChatWidget({
   styleProps,
   chat,
-  meta,
 }: {
   styleProps?: { [key: string]: any };
-  chat: Chat;
-  meta: ChatMeta;
+  chat: MainChat;
 }) {
   return (
     <HStack
@@ -46,7 +45,7 @@ export default function ChatWidget({
 
       {/* Unread count */}
       <IconBox width="10" height="10">
-        <Text>{meta.unreadCount}</Text>
+        <Text>{chat.meta.unreadCount}</Text>
       </IconBox>
     </HStack>
   );
