@@ -1,10 +1,13 @@
 import { UserProvider } from "@/context/user/UserContext";
 import { ContactsProvider } from "./contacts/ContactsContext";
+import { ChatsProvider } from "./chats/ChatsContext";
 
 export const ContextProvider = ({ children }) => {
   return (
-    <ContactsProvider>
-      <UserProvider>{children}</UserProvider>
-    </ContactsProvider>
+    <ChatsProvider>
+      <ContactsProvider>
+        <UserProvider>{children}</UserProvider>
+      </ContactsProvider>
+    </ChatsProvider>
   );
 };
