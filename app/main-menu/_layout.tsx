@@ -1,17 +1,27 @@
 import { VStack, HStack, Box } from "native-base";
+
 import { Slot } from "expo-router";
 import { Link } from "expo-router";
-import IconBox from "@/components/IconBox";
-import MainIcon from "@/components/MainIcon";
-import { useContactsContext } from "@/context/contacts/ContactsContext";
-import { useEffect } from "react";
 import * as Contacts from "expo-contacts";
-import firestore from "@react-native-firebase/firestore";
-import { MainContact, MainUser } from "@/types";
+
+import { useEffect } from "react";
 import { Platform } from "react-native";
 
+import IconBox from "@/components/IconBox";
+import MainIcon from "@/components/MainIcon";
+
+import { useUserContext } from "@/context/user/UserContext";
+import { useContactsContext } from "@/context/contacts/ContactsContext";
+import { useChatsContext } from "@/context/chats/ChatsContext";
+
+import firestore from "@react-native-firebase/firestore";
+
+import { MainChat, MainContact, MainMessage, MainUser } from "@/types";
+
 export default function MainMenuLayout() {
-  const { dispatch } = useContactsContext();
+  const { state } = useUserContext();
+  const { dispatch: dispatchChats } = useChatsContext();
+  const { dispatch: dispatchContacts } = useContactsContext();
 
   // Fetch user's contacts if on mobile
   useEffect(() => {
@@ -58,11 +68,52 @@ export default function MainMenuLayout() {
           }
 
           // Set contacts in context
-          dispatch({ type: "SET_CONTACTS", payload: contacts });
+          dispatchContacts({ type: "SET_CONTACTS", payload: contacts });
         }
       }
     })();
   }, []);
+
+  // Fetch user's chats & messages
+  useEffect(() => {
+    (async () => {
+      const metaChats = state.userData.chats;
+      const chats: { [chatId: string]: MainChat } = {};
+      const messages: { [messageId: string]: MainMessage } = {};
+
+      // Fetch chats from firestore
+      for (const chatId in metaChats) {
+        const chat = await firestore().collection("chats").doc(chatId).get();
+        if (chat.exists) {
+          chats[chatId] = chat.data() as MainChat;
+
+          // Fetch messages from chat
+          const chatMessages = chats[chatId].messages;
+          for (const messageId in chatMessages) {
+            const message = await firestore()
+              .collection("messages")
+              .doc(messageId)
+              .get();
+            if (message.exists) {
+              messages[messageId] = message.data() as MainMessage;
+            }
+          }
+        }
+      }
+
+      // Set chats in context
+      dispatchChats({
+        type: "SET_CHATS",
+        payload: chats,
+      });
+
+      // Set messages in context
+      dispatchChats({
+        type: "SET_MESSAGES",
+        payload: messages,
+      });
+    })();
+  }, [state.userData.chats]);
 
   return (
     <VStack
